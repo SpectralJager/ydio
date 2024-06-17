@@ -44,7 +44,7 @@ func (h AudioHandler) GetAudio(ctx echo.Context) error {
 	if err != nil {
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
-	ctx.Response().Header().Set("Content-Type", "audio/mpeg3")
+	ctx.Response().Header().Set("Content-Type", "audio/mpeg, audio/x-mpeg, audio/mp3, audio/x-mp3, audio/mpeg3, audio/x-mpeg3, audio/mpg, audio/x-mpg, audio/x-mpegaudio")
 	return ctx.Attachment(
 		fmt.Sprintf("./public/audio/%s.mp3", id),
 		fmt.Sprintf("%s.mp3", meta.Title),

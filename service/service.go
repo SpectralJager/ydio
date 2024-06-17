@@ -1,11 +1,11 @@
 package service
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/kkdai/youtube/v2"
 )
@@ -28,9 +28,13 @@ func (serv *DownloadAudio) GetAudioMetadate(url string) (*youtube.Video, error) 
 	if err != nil {
 		return nil, err
 	}
+	data, _ := json.MarshalIndent(meta.Formats, "", "  ")
+	file, _ := os.Create("formats.json")
+	file.Write(data)
 	formats := meta.Formats.WithAudioChannels()
 	formats = formats.Select(func(f youtube.Format) bool {
-		return strings.Contains(f.MimeType, "audio/webm")
+		return f.MimeType == "audio/webm; codecs=\"opus\"" &&
+			f.AudioQuality == "AUDIO_QUALITY_MEDIUM"
 	})
 	meta.Formats = formats
 	return meta, nil
