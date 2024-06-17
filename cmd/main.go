@@ -5,7 +5,9 @@ import (
 	"os"
 
 	"github.com/SpectralJager/ydio/handler"
+	"github.com/SpectralJager/ydio/service"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -13,14 +15,25 @@ func main() {
 
 	app.StaticFS("/static", os.DirFS("./public"))
 
-	indexHandler := handler.IndexHandler{}
+	app.Use(middleware.Logger())
 
-	app.GET("/", indexHandler.RenderPage)
-	app.GET("/audio", indexHandler.DownloadFile)
-	app.POST("/htmx/search_video", indexHandler.SearchVideo)
+	audioService := service.NewDownloadAudioService()
+
+	indexHandler := handler.IndexHandler{Searcher: audioService}
+	audioHandler := handler.AudioHandler{Downloader: audioService}
+
+	htmx := app.Group("/htmx/v1")
+	htmx.POST("/search", indexHandler.SearchHTMX)
+	htmx.POST("/download", audioHandler.DownloadHTMX)
+
+	index := app.Group("/")
+	index.GET("", indexHandler.RenderPage)
+
+	audio := app.Group("/audio")
+	audio.GET("/:id", audioHandler.RenderPage)
+	audio.GET("/:id/get", audioHandler.GetAudio)
 
 	if err := app.Start(":8080"); err != nil {
 		log.Fatal(err)
 	}
-
 }

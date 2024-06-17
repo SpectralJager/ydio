@@ -11,11 +11,26 @@ templ Base() {
 			<title>Document</title>
 		</head>
 		<body>
-			<div class="w-4/12 m-auto mt-20">
+			<div class="lg:w-4/12 m-auto mt-20">
 				<div id="wrapper">
 					{ children... }
 				</div>
+				<div id="feedback"></div>
 			</div>
 		</body>
 	</html>
+}
+
+templ SearchResult(result string, isError bool) {
+	<div class="toast toast-top toast-center">
+		if isError {
+			<div class="alert alert-error">
+				<span>{ result }</span>
+			</div>
+		} else {
+			<div class="alert alert-success">
+				<span>{ result }</span>
+			</div>
+		}
+	</div>
 }
