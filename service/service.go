@@ -1,13 +1,20 @@
 package service
 
 import (
+	"archive/zip"
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
+	"regexp"
 
 	"github.com/kkdai/youtube/v2"
+)
+
+var (
+	rgxp = regexp.MustCompile(`[^a-zA-Z0-9\.,;:&\[\]'" ]+`)
 )
 
 type DownloadAudio struct {
@@ -40,24 +47,65 @@ func (serv *DownloadAudio) GetAudioMetadate(url string) (*youtube.Video, error) 
 	return meta, nil
 }
 
-func (serv *DownloadAudio) DownloadAudio(audio *youtube.Video) (string, error) {
-	stream, _, err := serv.client.GetStream(audio, &audio.Formats[0])
-	if err != nil {
-		return "", err
-	}
-	defer stream.Close()
+func (serv *DownloadAudio) GetPlaylistMetadate(url string) (*youtube.Playlist, error) {
+	return serv.client.GetPlaylist(url)
+}
 
+func (serv *DownloadAudio) DownloadAudio(audio *youtube.Video) error {
 	path := fmt.Sprintf("public/audio/%s.mp3", audio.ID)
-
 	file, err := os.Create(path)
 	if err != nil {
-		return "", err
+		return err
 	}
 	defer file.Close()
 
-	_, err = io.Copy(file, stream)
+	return serv.downloadAudio(audio, file)
+
+}
+
+func (serv *DownloadAudio) DownloadPlaylist(playlist *youtube.Playlist) error {
+	zipFile, err := os.Create(fmt.Sprintf("./public/audio/%s.zip", playlist.ID))
 	if err != nil {
-		return "", err
+		return err
 	}
-	return fmt.Sprintf("/static/audio/%s.mp3", audio.ID), nil
+	zipWriter := zip.NewWriter(zipFile)
+	defer zipWriter.Close()
+	counter := 0
+	for _, video := range playlist.Videos {
+		video, err := serv.GetAudioMetadate(video.ID)
+		if err != nil {
+			continue
+		}
+		zipFile, err := zipWriter.Create(fmt.Sprintf("%s.mp3", rgxp.ReplaceAllString(video.Title, " ")))
+		if err != nil {
+			continue
+		}
+		err = serv.downloadAudio(video, zipFile)
+		if err != nil {
+			continue
+		}
+		log.Println(video.Title)
+		counter += 1
+	}
+	if counter == 0 {
+		return fmt.Errorf("can't download audios for playlist %s", playlist.ID)
+	}
+	return nil
+}
+
+func (serv *DownloadAudio) downloadAudio(audio *youtube.Video, writer io.Writer) error {
+	if len(audio.Formats) == 0 {
+		return fmt.Errorf("no audio format for '%s'", audio.ID)
+	}
+	stream, _, err := serv.client.GetStream(audio, &audio.Formats[0])
+	if err != nil {
+		return err
+	}
+	defer stream.Close()
+
+	_, err = io.Copy(writer, stream)
+	if err != nil {
+		return err
+	}
+	return nil
 }

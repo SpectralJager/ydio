@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/SpectralJager/ydio/service"
@@ -18,24 +19,25 @@ func (h AudioHandler) RenderPage(ctx echo.Context) error {
 	id := ctx.Param("id")
 	meta, err := h.Downloader.GetAudioMetadate(id)
 	if err != nil {
-		ctx.Response().Header().Set("HX-Location", "/")
-		return nil
+		log.Println(err)
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
 	return view.AudioView(meta).Render(context.TODO(), ctx.Response())
 }
 
-func (h AudioHandler) DownloadHTMX(ctx echo.Context) error {
-	id := ctx.FormValue("id")
+func (h AudioHandler) DownloadAudio(ctx echo.Context) error {
+	id := ctx.Param("id")
 	meta, err := h.Downloader.GetAudioMetadate(id)
 	if err != nil {
-		return view.SearchResult(err.Error(), true).Render(context.TODO(), ctx.Response())
+		log.Println(err)
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
-	_, err = h.Downloader.DownloadAudio(meta)
+	err = h.Downloader.DownloadAudio(meta)
 	if err != nil {
-		return view.SearchResult(err.Error(), true).Render(context.TODO(), ctx.Response())
+		log.Println(err)
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
-	ctx.Response().Header().Set("HX-Redirect", fmt.Sprintf("/audio/%s/get", id))
-	return nil
+	return ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("/audio/%s/get", meta.ID))
 }
 
 func (h AudioHandler) GetAudio(ctx echo.Context) error {

@@ -3,6 +3,8 @@ package handler
 import (
 	"context"
 	"fmt"
+	"log"
+	"net/http"
 
 	"github.com/SpectralJager/ydio/service"
 	"github.com/SpectralJager/ydio/view"
@@ -18,11 +20,15 @@ func (h IndexHandler) RenderPage(ctx echo.Context) error {
 }
 
 func (h IndexHandler) SearchHTMX(ctx echo.Context) error {
-	url := ctx.FormValue("url")
-	meta, err := h.Searcher.GetAudioMetadate(url)
-	if err != nil {
-		return view.SearchResult(err.Error(), true).Render(context.TODO(), ctx.Response())
+	url := ctx.QueryParam("url")
+	vmeta, err := h.Searcher.GetAudioMetadate(url)
+	if err == nil {
+		return ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("/audio/%s", vmeta.ID))
 	}
-	ctx.Response().Header().Set("HX-Location", fmt.Sprintf("/audio/%s", meta.ID))
-	return nil
+	pmeta, err := h.Searcher.GetPlaylistMetadate(url)
+	if err == nil {
+		return ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("/playlist/%s", pmeta.ID))
+	}
+	log.Println(err)
+	return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 }

@@ -21,17 +21,21 @@ func main() {
 
 	indexHandler := handler.IndexHandler{Searcher: audioService}
 	audioHandler := handler.AudioHandler{Downloader: audioService}
+	playlistHandler := handler.PlaylistHandler{Downloader: audioService}
 
-	htmx := app.Group("/htmx/v1")
-	htmx.POST("/search", indexHandler.SearchHTMX)
-	htmx.POST("/download", audioHandler.DownloadHTMX)
-
-	index := app.Group("/")
+	index := app.Group("")
 	index.GET("", indexHandler.RenderPage)
+	index.GET("/search", indexHandler.SearchHTMX)
 
-	audio := app.Group("/audio")
-	audio.GET("/:id", audioHandler.RenderPage)
-	audio.GET("/:id/get", audioHandler.GetAudio)
+	audio := app.Group("/audio/:id")
+	audio.GET("", audioHandler.RenderPage)
+	audio.GET("/download", audioHandler.DownloadAudio)
+	audio.GET("/get", audioHandler.GetAudio)
+
+	playlist := app.Group("/playlist/:id")
+	playlist.GET("", playlistHandler.RenderPage)
+	playlist.GET("/download", playlistHandler.DownloadPlaylist)
+	playlist.GET("/get", playlistHandler.GetPlaylist)
 
 	if err := app.Start(":8080"); err != nil {
 		log.Fatal(err)

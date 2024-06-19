@@ -15,11 +15,13 @@
 *.out
 *.webm
 *.mp3
+*.zip
 
 # Dependency directories (remove the comment below to include it)
 vendor/
 node_modules/
 tmp/
+public/audio/
 
 # Go workspace file
 go.work

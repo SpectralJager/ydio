@@ -4,11 +4,11 @@ templ IndexView() {
 	@Base() {
 		<div class="flex flex-col gap-8 px-10">
 			<h1 class="text-2xl font-bold">Welcome to youtube audio downloader!</h1>
-			<form hx-post="/htmx/v1/search" hx-target="#feedback" hx-swap="innerHTML" class="flex flex-col gap-4">
+			<form hx-boost="true" method="GET" action="/search" class="flex flex-col gap-4">
 				<label class="input input-bordered flex items-center gap-2">
-					<input name="url" type="text" class="grow" placeholder="Enter youtube video id or url"/>
+					<input name="url" type="text" class="grow" placeholder="Enter youtube video or playlist url"/>
 				</label>
-				<button class="btn bg-success">Search</button>
+				<button type="submit" class="btn bg-success">Search</button>
 			</form>
 		</div>
 	}

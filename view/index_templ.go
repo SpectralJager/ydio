@@ -29,7 +29,7 @@ func IndexView() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col gap-8 px-10\"><h1 class=\"text-2xl font-bold\">Welcome to youtube audio downloader!</h1><form hx-post=\"/htmx/v1/search\" hx-target=\"#feedback\" hx-swap=\"innerHTML\" class=\"flex flex-col gap-4\"><label class=\"input input-bordered flex items-center gap-2\"><input name=\"url\" type=\"text\" class=\"grow\" placeholder=\"Enter youtube video id or url\"></label> <button class=\"btn bg-success\">Search</button></form></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col gap-8 px-10\"><h1 class=\"text-2xl font-bold\">Welcome to youtube audio downloader!</h1><form hx-boost=\"true\" method=\"GET\" action=\"/search\" class=\"flex flex-col gap-4\"><label class=\"input input-bordered flex items-center gap-2\"><input name=\"url\" type=\"text\" class=\"grow\" placeholder=\"Enter youtube video or playlist url\"></label> <button type=\"submit\" class=\"btn bg-success\">Search</button></form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
