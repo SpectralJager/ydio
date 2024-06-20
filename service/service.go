@@ -63,7 +63,19 @@ func (serv *DownloadAudio) DownloadAudio(audio *youtube.Video) error {
 
 }
 
-func (serv *DownloadAudio) DownloadPlaylist(playlist *youtube.Playlist) error {
+func (serv *DownloadAudio) DownloadPlaylist(playlist *youtube.Playlist, ids []string) error {
+	if len(ids) != 0 {
+		videos := []*youtube.PlaylistEntry{}
+		for _, id := range ids {
+			for _, entry := range playlist.Videos {
+				if id == entry.ID {
+					videos = append(videos, entry)
+					break
+				}
+			}
+		}
+		playlist.Videos = videos
+	}
 	zipFile, err := os.Create(fmt.Sprintf("./public/audio/%s.zip", playlist.ID))
 	if err != nil {
 		return err

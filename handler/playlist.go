@@ -32,12 +32,17 @@ func (h PlaylistHandler) RenderPage(ctx echo.Context) error {
 
 func (h PlaylistHandler) DownloadPlaylist(ctx echo.Context) error {
 	id := ctx.Param("id")
+	ids, ok := ctx.QueryParams()["videoIds[]"]
+	if !ok {
+		ids = []string{}
+	}
+	log.Println(ids)
 	meta, err := h.Downloader.GetPlaylistMetadate(id)
 	if err != nil {
 		log.Println(err)
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
-	err = h.Downloader.DownloadPlaylist(meta)
+	err = h.Downloader.DownloadPlaylist(meta, ids)
 	if err != nil {
 		log.Println(err)
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
