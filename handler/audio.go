@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -51,4 +52,17 @@ func (h AudioHandler) GetAudio(ctx echo.Context) error {
 		fmt.Sprintf("./public/audio/%s.mp3", id),
 		fmt.Sprintf("%s.mp3", meta.Title),
 	)
+}
+
+func (h AudioHandler) GetStatus(ctx echo.Context) error {
+	w := ctx.Response()
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+
+	log.Println("sse")
+
+	json.NewEncoder(w).Encode(echo.Map{"event": "message", "data": "ok"})
+	w.Flush()
+	return ctx.NoContent(http.StatusOK)
 }

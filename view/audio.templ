@@ -30,6 +30,7 @@ templ AudioView(meta *youtube.Video) {
 				<a hx-boost="true" href="/" class="btn btn-neutral grow">Cancel</a>
 				<a href={ templ.URL(fmt.Sprintf("/audio/%s/download", meta.ID)) } class="btn btn-primary grow">Download</a>
 			</div>
+			<div hx-ext="sse" sse-connect={ fmt.Sprintf("/audio/%s/event", meta.ID) } sse-swap="message" hx-swap="innerHTML"></div>
 		</div>
 	}
 }

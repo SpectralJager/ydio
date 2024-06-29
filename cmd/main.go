@@ -31,6 +31,7 @@ func main() {
 	audio.GET("", audioHandler.RenderPage)
 	audio.GET("/download", audioHandler.DownloadAudio)
 	audio.GET("/get", audioHandler.GetAudio)
+	audio.GET("/event", audioHandler.GetStatus)
 
 	playlist := app.Group("/playlist/:id")
 	playlist.GET("", playlistHandler.RenderPage)
