@@ -1,8 +1,8 @@
 package handler
 
 import (
+	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -33,12 +33,7 @@ func (h AudioHandler) DownloadAudio(ctx echo.Context) error {
 		log.Println(err)
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
-	err = h.Downloader.DownloadAudio(meta)
-	if err != nil {
-		log.Println(err)
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
-	}
-	return ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("/audio/%s/get", meta.ID))
+	return view.Render(context.TODO(), ctx.Response(), view.AudioStartDownload(meta))
 }
 
 func (h AudioHandler) GetAudio(ctx echo.Context) error {
@@ -55,6 +50,17 @@ func (h AudioHandler) GetAudio(ctx echo.Context) error {
 }
 
 func (h AudioHandler) GetStatus(ctx echo.Context) error {
+	id := ctx.Param("id")
+	meta, err := h.Downloader.GetAudioMetadate(id)
+	if err != nil {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+	}
+	err = h.Downloader.DownloadAudio(meta)
+	if err != nil {
+		log.Println(err)
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+	}
+
 	w := ctx.Response()
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")
@@ -62,7 +68,15 @@ func (h AudioHandler) GetStatus(ctx echo.Context) error {
 
 	log.Println("sse")
 
-	json.NewEncoder(w).Encode(echo.Map{"event": "message", "data": "ok"})
+	var buff bytes.Buffer
+	buff.WriteString("event: close\n")
+	buff.WriteString("data: ")
+	view.AudioGet(meta).Render(context.TODO(), &buff)
+	buff.WriteString("\n\n")
+
+	w.Write(buff.Bytes())
+
 	w.Flush()
-	return ctx.NoContent(http.StatusOK)
+
+	return view.Render(context.TODO(), ctx.Response(), view.AudioGet(meta))
 }
