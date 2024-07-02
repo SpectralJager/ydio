@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"log"
@@ -32,6 +33,32 @@ func (h PlaylistHandler) RenderPage(ctx echo.Context) error {
 
 func (h PlaylistHandler) DownloadPlaylist(ctx echo.Context) error {
 	id := ctx.Param("id")
+	meta, err := h.Downloader.GetPlaylistMetadate(id)
+	if err != nil {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+	}
+	ids, ok := ctx.QueryParams()["videoIds[]"]
+	if !ok {
+		ids = []string{}
+	}
+	return view.PlaylistDownload(meta, ids).Render(context.TODO(), ctx.Response())
+}
+
+func (h PlaylistHandler) GetPlaylist(ctx echo.Context) error {
+	id := ctx.Param("id")
+	meta, err := h.Downloader.GetPlaylistMetadate(id)
+	if err != nil {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+	}
+	ctx.Response().Header().Set("Content-Type", "application/zip")
+	return ctx.Attachment(
+		fmt.Sprintf("./public/audio/%s.zip", id),
+		fmt.Sprintf("%s.zip", meta.Title),
+	)
+}
+
+func (h PlaylistHandler) StatusPlaylist(ctx echo.Context) error {
+	id := ctx.Param("id")
 	ids, ok := ctx.QueryParams()["videoIds[]"]
 	if !ok {
 		ids = []string{}
@@ -47,18 +74,23 @@ func (h PlaylistHandler) DownloadPlaylist(ctx echo.Context) error {
 		log.Println(err)
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
-	return ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("/playlist/%s/get", meta.ID))
-}
 
-func (h PlaylistHandler) GetPlaylist(ctx echo.Context) error {
-	id := ctx.Param("id")
-	meta, err := h.Downloader.GetPlaylistMetadate(id)
-	if err != nil {
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
-	}
-	ctx.Response().Header().Set("Content-Type", "application/zip")
-	return ctx.Attachment(
-		fmt.Sprintf("./public/audio/%s.zip", id),
-		fmt.Sprintf("%s.zip", meta.Title),
-	)
+	w := ctx.Response()
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+
+	log.Println("sse")
+
+	var buff bytes.Buffer
+	buff.WriteString("event: close\n")
+	buff.WriteString("data: ")
+	view.PlaylistGet(meta).Render(context.TODO(), &buff)
+	buff.WriteString("\n\n")
+
+	w.Write(buff.Bytes())
+
+	w.Flush()
+
+	return view.Render(context.TODO(), ctx.Response(), view.PlaylistGet(meta))
 }

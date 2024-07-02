@@ -37,6 +37,7 @@ func main() {
 	playlist.GET("", playlistHandler.RenderPage)
 	playlist.GET("/download", playlistHandler.DownloadPlaylist)
 	playlist.GET("/get", playlistHandler.GetPlaylist)
+	playlist.GET("/status", playlistHandler.StatusPlaylist)
 
 	if err := app.Start(":8080"); err != nil {
 		log.Fatal(err)

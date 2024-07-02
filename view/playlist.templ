@@ -3,6 +3,7 @@ package view
 import "github.com/kkdai/youtube/v2"
 import "fmt"
 import "time"
+import "strings"
 
 templ PlaylistView(playlist *youtube.Playlist, total time.Duration) {
 	@Base() {
@@ -27,7 +28,7 @@ templ PlaylistView(playlist *youtube.Playlist, total time.Duration) {
 					<div class="stat-value">{ total.String() }</div>
 				</div>
 			</div>
-			<form method="GET" action={ templ.URL(fmt.Sprintf("/playlist/%s/download", playlist.ID)) }>
+			<form method="get" hx-get={ fmt.Sprintf("/playlist/%s/download", playlist.ID) } hx-target="this" hx-swap="outerHTML">
 				<div class="flex flex-row gap-2">
 					<a hx-boost="true" href="/" class="btn btn-neutral grow">Cancel</a>
 					<button type="submit" class="btn btn-primary grow">Download</button>
@@ -43,4 +44,17 @@ templ PlaylistView(playlist *youtube.Playlist, total time.Duration) {
 			</form>
 		</div>
 	}
+}
+
+templ PlaylistGet(meta *youtube.Playlist) {
+	<div class="flex flex-row gap-2">
+		<a hx-boost="true" href="/" class="btn btn-neutral grow">Cancel</a>
+		<a href={ templ.URL(fmt.Sprintf("/playlist/%s/get", meta.ID)) } class="btn btn-primary grow">Get</a>
+	</div>
+}
+
+templ PlaylistDownload(meta *youtube.Playlist, ids []string) {
+	<div hx-ext="sse" sse-connect={ fmt.Sprintf("/playlist/%s/status?videoIds[]=%s", meta.ID, strings.Join(ids, "&playlist[]=")) } sse-swap="close" sse-close="close" hx-target="this" hx-swap="outerHTML" class="text-xl text-center text-red-600 font-bold">
+		Downloading...
+	</div>
 }
