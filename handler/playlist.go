@@ -59,7 +59,11 @@ func (h PlaylistHandler) GetPlaylist(ctx echo.Context) error {
 
 func (h PlaylistHandler) StatusPlaylist(ctx echo.Context) error {
 	id := ctx.Param("id")
-	ids, ok := ctx.QueryParams()["videoIds[]"]
+	params, err := ctx.FormParams()
+	if err != nil {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+	}
+	ids, ok := params["videoIds[]"]
 	if !ok {
 		ids = []string{}
 	}

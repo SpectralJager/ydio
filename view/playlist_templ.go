@@ -99,7 +99,7 @@ func PlaylistView(playlist *youtube.Playlist, total time.Duration) templ.Compone
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"this\" hx-swap=\"outerHTML\"><div class=\"flex flex-row gap-2\"><a hx-boost=\"true\" href=\"/\" class=\"btn btn-neutral grow\">Cancel</a> <button type=\"submit\" class=\"btn btn-primary grow\">Download</button></div><div class=\"form-control mt-4\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\"><div class=\"flex flex-row gap-2\"><a hx-boost=\"true\" href=\"/\" class=\"btn btn-neutral grow\">Cancel</a> <button type=\"submit\" class=\"btn btn-primary grow\">Download</button></div><div class=\"form-control mt-4\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -206,7 +206,7 @@ func PlaylistDownload(meta *youtube.Playlist, ids []string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var13 string
-		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/playlist/%s/status?videoIds[]=%s", meta.ID, strings.Join(ids, "&playlist[]=")))
+		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/playlist/%s/status?videoIds[]=%s", meta.ID, strings.Join(ids, "&videoIds[]=")))
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 57, Col: 125}
 		}

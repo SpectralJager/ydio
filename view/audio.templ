@@ -26,17 +26,17 @@ templ AudioView(meta *youtube.Video) {
 					<div class="stat-value">{ meta.Duration.String() }</div>
 				</div>
 			</div>
-			<div class="flex flex-row gap-2" hx-target="this" hx-swap="outerHTML">
+			<div class="flex flex-row gap-2">
 				<a hx-boost="true" href="/" class="btn btn-neutral grow">Cancel</a>
-				<a hx-get={ fmt.Sprintf("/audio/%s/download", meta.ID) } class="btn btn-primary grow">Download</a>
+				<a hx-get={ fmt.Sprintf("/audio/%s/download", meta.ID) } hx-target="this" hx-swap="outerHTML" class="btn btn-primary grow">Download</a>
 			</div>
 		</div>
 	}
 }
 
 templ AudioGet(meta *youtube.Video) {
-	<div class="flex flex-row gap-2">
-		<a hx-boost="true" href="/" class="btn btn-neutral grow">Cancel</a>
+	<div hx-boost="true" class="flex flex-row gap-2">
+		<a href="/" class="btn btn-neutral grow">Cancel</a>
 		<a href={ templ.URL(fmt.Sprintf("/audio/%s/get", meta.ID)) } class="btn btn-primary grow">Get</a>
 	</div>
 }

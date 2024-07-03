@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/SpectralJager/ydio/service"
@@ -19,16 +18,20 @@ func (h IndexHandler) RenderPage(ctx echo.Context) error {
 	return view.IndexView().Render(context.TODO(), ctx.Response())
 }
 
-func (h IndexHandler) SearchHTMX(ctx echo.Context) error {
+func (h IndexHandler) SearchVideo(ctx echo.Context) error {
 	url := ctx.QueryParam("url")
-	vmeta, err := h.Searcher.GetAudioMetadate(url)
-	if err == nil {
-		return ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("/audio/%s", vmeta.ID))
+	meta, err := h.Searcher.GetAudioMetadate(url)
+	if err != nil {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
-	pmeta, err := h.Searcher.GetPlaylistMetadate(url)
-	if err == nil {
-		return ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("/playlist/%s", pmeta.ID))
+	return ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("/audio/%s", meta.ID))
+}
+
+func (h IndexHandler) SearchPlaylist(ctx echo.Context) error {
+	url := ctx.QueryParam("url")
+	meta, err := h.Searcher.GetPlaylistMetadate(url)
+	if err != nil {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
-	log.Println(err)
-	return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+	return ctx.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("/playlist/%s", meta.ID))
 }

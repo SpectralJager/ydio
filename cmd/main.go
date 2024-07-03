@@ -25,7 +25,8 @@ func main() {
 
 	index := app.Group("")
 	index.GET("", indexHandler.RenderPage)
-	index.GET("/search", indexHandler.SearchHTMX)
+	index.GET("/searchVideo", indexHandler.SearchVideo)
+	index.GET("/searchPlaylist", indexHandler.SearchPlaylist)
 
 	audio := app.Group("/audio/:id")
 	audio.GET("", audioHandler.RenderPage)
