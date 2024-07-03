@@ -6,6 +6,8 @@ import (
 
 	"github.com/SpectralJager/ydio/handler"
 	"github.com/SpectralJager/ydio/service"
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -34,9 +36,9 @@ func main() {
 	audio.GET("/get", audioHandler.GetAudio)
 	audio.GET("/status", audioHandler.GetStatus)
 
-	playlist := app.Group("/playlist/:id")
+	playlist := app.Group("/playlist/:id", session.Middleware(sessions.NewCookieStore([]byte("test"))))
 	playlist.GET("", playlistHandler.RenderPage)
-	playlist.GET("/download", playlistHandler.DownloadPlaylist)
+	playlist.POST("/download", playlistHandler.DownloadPlaylist)
 	playlist.GET("/get", playlistHandler.GetPlaylist)
 	playlist.GET("/status", playlistHandler.StatusPlaylist)
 

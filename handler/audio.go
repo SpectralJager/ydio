@@ -40,6 +40,7 @@ func (h AudioHandler) GetAudio(ctx echo.Context) error {
 	id := ctx.Param("id")
 	meta, err := h.Downloader.GetAudioMetadate(id)
 	if err != nil {
+		log.Println(err)
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
 	ctx.Response().Header().Set("Content-Type", "audio/mpeg, audio/x-mpeg, audio/mp3, audio/x-mp3, audio/mpeg3, audio/x-mpeg3, audio/mpg, audio/x-mpg, audio/x-mpegaudio")
@@ -53,6 +54,7 @@ func (h AudioHandler) GetStatus(ctx echo.Context) error {
 	id := ctx.Param("id")
 	meta, err := h.Downloader.GetAudioMetadate(id)
 	if err != nil {
+		log.Println(err)
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
 	err = h.Downloader.DownloadAudio(meta)

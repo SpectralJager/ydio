@@ -13,7 +13,6 @@ import "bytes"
 import "github.com/kkdai/youtube/v2"
 import "fmt"
 import "time"
-import "strings"
 
 func PlaylistView(playlist *youtube.Playlist, total time.Duration) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -41,7 +40,7 @@ func PlaylistView(playlist *youtube.Playlist, total time.Duration) templ.Compone
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("https://i3.ytimg.com/vi/%s/maxresdefault.jpg", playlist.Videos[0].ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 12, Col: 97}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 11, Col: 97}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -54,7 +53,7 @@ func PlaylistView(playlist *youtube.Playlist, total time.Duration) templ.Compone
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(playlist.Title)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 14, Col: 50}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 13, Col: 50}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -67,7 +66,7 @@ func PlaylistView(playlist *youtube.Playlist, total time.Duration) templ.Compone
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", len(playlist.Videos)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 21, Col: 70}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 20, Col: 70}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -80,20 +79,20 @@ func PlaylistView(playlist *youtube.Playlist, total time.Duration) templ.Compone
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(total.String())
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 28, Col: 45}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 27, Col: 45}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><form method=\"get\" hx-get=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><form method=\"post\" hx-post=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/playlist/%s/download", playlist.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 31, Col: 80}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 30, Col: 82}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -111,7 +110,7 @@ func PlaylistView(playlist *youtube.Playlist, total time.Duration) templ.Compone
 				var templ_7745c5c3_Var8 string
 				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(video.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 39, Col: 45}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 38, Col: 45}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 				if templ_7745c5c3_Err != nil {
@@ -124,7 +123,7 @@ func PlaylistView(playlist *youtube.Playlist, total time.Duration) templ.Compone
 				var templ_7745c5c3_Var9 string
 				templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(video.ID)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 40, Col: 99}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 39, Col: 99}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 				if templ_7745c5c3_Err != nil {
@@ -206,9 +205,9 @@ func PlaylistDownload(meta *youtube.Playlist, ids []string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var13 string
-		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/playlist/%s/status?videoIds[]=%s", meta.ID, strings.Join(ids, "&videoIds[]=")))
+		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/playlist/%s/status", meta.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 57, Col: 125}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/playlist.templ`, Line: 58, Col: 59}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
