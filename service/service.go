@@ -48,6 +48,7 @@ func (serv *DownloadAudio) GetAudioMetadate(url string) (*youtube.Video, error) 
 }
 
 func (serv *DownloadAudio) GetPlaylistMetadate(url string) (*youtube.Playlist, error) {
+	log.Println(url)
 	return serv.client.GetPlaylist(url)
 }
 

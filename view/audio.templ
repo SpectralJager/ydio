@@ -1,7 +1,9 @@
 package view
 
-import "fmt"
-import "github.com/kkdai/youtube/v2"
+import (
+	"fmt"
+	"github.com/kkdai/youtube/v2"
+)
 
 templ AudioView(meta *youtube.Video) {
 	@Base() {
@@ -28,21 +30,21 @@ templ AudioView(meta *youtube.Video) {
 			</div>
 			<div class="flex flex-row gap-2">
 				<a hx-boost="true" href="/" class="btn btn-neutral grow">Cancel</a>
-				<a hx-get={ fmt.Sprintf("/audio/%s/download", meta.ID) } hx-target="this" hx-swap="outerHTML" class="btn btn-primary grow">Download</a>
+				<button hx-get="/audio/download" hx-target="closest div" hx-swap="outerHTML" class="btn btn-primary grow">Download</button>
 			</div>
 		</div>
 	}
 }
 
 templ AudioGet(meta *youtube.Video) {
-	<div hx-boost="true" class="flex flex-row gap-2">
-		<a href="/" class="btn btn-neutral grow">Cancel</a>
-		<a href={ templ.URL(fmt.Sprintf("/audio/%s/get", meta.ID)) } class="btn btn-primary grow">Get</a>
+	<div class="flex flex-row gap-2">
+		<a hx-boost="true" href="/" class="btn btn-neutral grow">Cancel</a>
+		<a href="/audio/get" class="btn btn-primary grow">Get</a>
 	</div>
 }
 
 templ AudioStartDownload(meta *youtube.Video) {
-	<div hx-ext="sse" sse-connect={ fmt.Sprintf("/audio/%s/status", meta.ID) } sse-swap="close" sse-close="close" hx-target="this" hx-swap="outerHTML" class="text-xl text-center text-red-600 font-bold">
+	<div hx-ext="sse" sse-connect="/audio/status" sse-swap="close" hx-target="this" hx-swap="outerHTML" class="text-xl text-center text-red-600 font-bold">
 		Downloading...
 	</div>
 }

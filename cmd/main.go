@@ -9,7 +9,6 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -17,7 +16,8 @@ func main() {
 
 	app.StaticFS("/static", os.DirFS("./public"))
 
-	app.Use(middleware.Logger())
+	// app.Use(middleware.Logger())
+	app.Use(session.Middleware(sessions.NewCookieStore([]byte("test"))))
 
 	audioService := service.NewDownloadAudioService()
 
@@ -30,13 +30,13 @@ func main() {
 	index.GET("/searchVideo", indexHandler.SearchVideo)
 	index.GET("/searchPlaylist", indexHandler.SearchPlaylist)
 
-	audio := app.Group("/audio/:id")
+	audio := app.Group("/audio")
 	audio.GET("", audioHandler.RenderPage)
 	audio.GET("/download", audioHandler.DownloadAudio)
 	audio.GET("/get", audioHandler.GetAudio)
 	audio.GET("/status", audioHandler.GetStatus)
 
-	playlist := app.Group("/playlist/:id", session.Middleware(sessions.NewCookieStore([]byte("test"))))
+	playlist := app.Group("/playlist")
 	playlist.GET("", playlistHandler.RenderPage)
 	playlist.POST("/download", playlistHandler.DownloadPlaylist)
 	playlist.GET("/get", playlistHandler.GetPlaylist)

@@ -17,7 +17,11 @@ type AudioHandler struct {
 }
 
 func (h AudioHandler) RenderPage(ctx echo.Context) error {
-	id := ctx.Param("id")
+	id, ok := GetValueFromSession[string](ctx, "audioID")
+	if !ok {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+	}
+	log.Println(id)
 	meta, err := h.Downloader.GetAudioMetadate(id)
 	if err != nil {
 		log.Println(err)
@@ -27,7 +31,10 @@ func (h AudioHandler) RenderPage(ctx echo.Context) error {
 }
 
 func (h AudioHandler) DownloadAudio(ctx echo.Context) error {
-	id := ctx.Param("id")
+	id, ok := GetValueFromSession[string](ctx, "audioID")
+	if !ok {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+	}
 	meta, err := h.Downloader.GetAudioMetadate(id)
 	if err != nil {
 		log.Println(err)
@@ -37,7 +44,10 @@ func (h AudioHandler) DownloadAudio(ctx echo.Context) error {
 }
 
 func (h AudioHandler) GetAudio(ctx echo.Context) error {
-	id := ctx.Param("id")
+	id, ok := GetValueFromSession[string](ctx, "audioID")
+	if !ok {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+	}
 	meta, err := h.Downloader.GetAudioMetadate(id)
 	if err != nil {
 		log.Println(err)
@@ -51,7 +61,10 @@ func (h AudioHandler) GetAudio(ctx echo.Context) error {
 }
 
 func (h AudioHandler) GetStatus(ctx echo.Context) error {
-	id := ctx.Param("id")
+	id, ok := GetValueFromSession[string](ctx, "audioID")
+	if !ok {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+	}
 	meta, err := h.Downloader.GetAudioMetadate(id)
 	if err != nil {
 		log.Println(err)
@@ -80,5 +93,5 @@ func (h AudioHandler) GetStatus(ctx echo.Context) error {
 
 	w.Flush()
 
-	return view.Render(context.TODO(), ctx.Response(), view.AudioGet(meta))
+	return nil
 }
