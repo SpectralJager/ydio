@@ -53,6 +53,7 @@ func (h PlaylistHandler) DownloadPlaylist(ctx echo.Context) error {
 	if !ok {
 		ids = []string{}
 	}
+	log.Println(ids)
 	err = SetValueToSession(ctx, "ids", ids)
 	if err != nil {
 		log.Println(err)
@@ -79,6 +80,11 @@ func (h PlaylistHandler) GetPlaylist(ctx echo.Context) error {
 }
 
 func (h PlaylistHandler) StatusPlaylist(ctx echo.Context) error {
+	w := ctx.Response()
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+
 	id, ok := GetValueFromSession[string](ctx, "playlistID")
 	if !ok {
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
@@ -92,18 +98,12 @@ func (h PlaylistHandler) StatusPlaylist(ctx echo.Context) error {
 	if !ok {
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
+	log.Println(ids)
 	err = h.Downloader.DownloadPlaylist(meta, ids)
 	if err != nil {
-		log.Println(err)
+		log.Println(1, err)
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
-
-	w := ctx.Response()
-	w.Header().Set("Content-Type", "text/event-stream")
-	w.Header().Set("Cache-Control", "no-cache")
-	w.Header().Set("Connection", "keep-alive")
-
-	log.Println("sse")
 
 	var buff bytes.Buffer
 	buff.WriteString("event: close\n")

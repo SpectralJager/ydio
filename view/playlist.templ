@@ -59,6 +59,7 @@ templ PlaylistDownload(meta *youtube.Playlist, ids []string) {
 		hx-ext="sse"
 		sse-connect="/playlist/status"
 		sse-swap="close"
+		sse-close="close"
 		hx-target="this"
 		hx-swap="outerHTML"
 		class="text-xl text-center text-red-600 font-bold"

@@ -65,18 +65,7 @@ func (serv *DownloadAudio) DownloadAudio(audio *youtube.Video) error {
 }
 
 func (serv *DownloadAudio) DownloadPlaylist(playlist *youtube.Playlist, ids []string) error {
-	if len(ids) != 0 {
-		videos := []*youtube.PlaylistEntry{}
-		for _, id := range ids {
-			for _, entry := range playlist.Videos {
-				if id == entry.ID {
-					videos = append(videos, entry)
-					break
-				}
-			}
-		}
-		playlist.Videos = videos
-	}
+	videos := playlist.Videos[:]
 	zipFile, err := os.Create(fmt.Sprintf("./public/audio/%s.zip", playlist.ID))
 	if err != nil {
 		return err
@@ -84,22 +73,34 @@ func (serv *DownloadAudio) DownloadPlaylist(playlist *youtube.Playlist, ids []st
 	zipWriter := zip.NewWriter(zipFile)
 	defer zipWriter.Close()
 	counter := 0
-	for _, video := range playlist.Videos {
-		video, err := serv.GetAudioMetadate(video.ID)
-		if err != nil {
-			continue
+	for _, id := range ids {
+		for i, entry := range videos {
+			if id != entry.ID {
+				continue
+			}
+			video, err := serv.GetAudioMetadate(entry.ID)
+			if err != nil {
+				log.Println("no meta", entry.Title)
+				continue
+			}
+			zipFile, err := zipWriter.Create(fmt.Sprintf("%s.mp3", rgxp.ReplaceAllString(video.Title, " ")))
+			if err != nil {
+				log.Println("can't create zip entity", entry.Title)
+				continue
+			}
+			err = serv.downloadAudio(video, zipFile)
+			if err != nil {
+				log.Println("can't download", entry.Title, err.Error())
+				continue
+			}
+			log.Println(video.Title)
+			counter += 1
+			if i < len(videos) {
+				videos = append(videos[:i], videos[i+1:]...)
+			}
 		}
-		zipFile, err := zipWriter.Create(fmt.Sprintf("%s.mp3", rgxp.ReplaceAllString(video.Title, " ")))
-		if err != nil {
-			continue
-		}
-		err = serv.downloadAudio(video, zipFile)
-		if err != nil {
-			continue
-		}
-		log.Println(video.Title)
-		counter += 1
 	}
+	fmt.Println(counter)
 	if counter == 0 {
 		return fmt.Errorf("can't download audios for playlist %s", playlist.ID)
 	}

@@ -72,7 +72,7 @@ func (h AudioHandler) GetStatus(ctx echo.Context) error {
 	}
 	err = h.Downloader.DownloadAudio(meta)
 	if err != nil {
-		log.Println(err)
+		log.Println(err, 1)
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
 

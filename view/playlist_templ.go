@@ -190,7 +190,7 @@ func PlaylistDownload(meta *youtube.Playlist, ids []string) templ.Component {
 			templ_7745c5c3_Var10 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div hx-ext=\"sse\" sse-connect=\"/playlist/status\" sse-swap=\"close\" hx-target=\"this\" hx-swap=\"outerHTML\" class=\"text-xl text-center text-red-600 font-bold\">Downloading...</div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div hx-ext=\"sse\" sse-connect=\"/playlist/status\" sse-swap=\"close\" sse-close=\"close\" hx-target=\"this\" hx-swap=\"outerHTML\" class=\"text-xl text-center text-red-600 font-bold\">Downloading...</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
