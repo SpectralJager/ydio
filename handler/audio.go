@@ -31,16 +31,7 @@ func (h AudioHandler) RenderPage(ctx echo.Context) error {
 }
 
 func (h AudioHandler) DownloadAudio(ctx echo.Context) error {
-	id, ok := GetValueFromSession[string](ctx, "audioID")
-	if !ok {
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
-	}
-	meta, err := h.Downloader.GetAudioMetadate(id)
-	if err != nil {
-		log.Println(err)
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
-	}
-	return view.Render(context.TODO(), ctx.Response(), view.AudioStartDownload(meta))
+	return view.Render(context.TODO(), ctx.Response(), view.AudioStartDownload())
 }
 
 func (h AudioHandler) GetAudio(ctx echo.Context) error {
@@ -61,32 +52,35 @@ func (h AudioHandler) GetAudio(ctx echo.Context) error {
 }
 
 func (h AudioHandler) GetStatus(ctx echo.Context) error {
-	id, ok := GetValueFromSession[string](ctx, "audioID")
-	if !ok {
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
-	}
-	meta, err := h.Downloader.GetAudioMetadate(id)
-	if err != nil {
-		log.Println(err)
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
-	}
-	err = h.Downloader.DownloadAudio(meta)
-	if err != nil {
-		log.Println(err, 1)
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
-	}
-
 	w := ctx.Response()
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
+
+	id, ok := GetValueFromSession[string](ctx, "audioID")
+	if !ok {
+		SendClose(ctx)
+		return nil
+	}
+	meta, err := h.Downloader.GetAudioMetadate(id)
+	if err != nil {
+		log.Println(err)
+		SendClose(ctx)
+		return nil
+	}
+	err = h.Downloader.DownloadAudio(meta)
+	if err != nil {
+		log.Println(err, 1)
+		SendClose(ctx)
+		return nil
+	}
 
 	log.Println("sse")
 
 	var buff bytes.Buffer
 	buff.WriteString("event: close\n")
 	buff.WriteString("data: ")
-	view.AudioGet(meta).Render(context.TODO(), &buff)
+	view.AudioGet().Render(context.TODO(), &buff)
 	buff.WriteString("\n\n")
 
 	w.Write(buff.Bytes())

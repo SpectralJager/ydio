@@ -87,22 +87,26 @@ func (h PlaylistHandler) StatusPlaylist(ctx echo.Context) error {
 
 	id, ok := GetValueFromSession[string](ctx, "playlistID")
 	if !ok {
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+		SendClose(ctx)
+		return nil
 	}
 	meta, err := h.Downloader.GetPlaylistMetadate(id)
 	if err != nil {
 		log.Println(err)
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+		SendClose(ctx)
+		return nil
 	}
 	ids, ok := GetValueFromSession[[]string](ctx, "ids")
 	if !ok {
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+		SendClose(ctx)
+		return nil
 	}
 	log.Println(ids)
 	err = h.Downloader.DownloadPlaylist(meta, ids)
 	if err != nil {
-		log.Println(1, err)
-		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
+		log.Println(err)
+		SendClose(ctx)
+		return nil
 	}
 
 	var buff bytes.Buffer

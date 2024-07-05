@@ -40,8 +40,8 @@ func (serv *DownloadAudio) GetAudioMetadate(url string) (*youtube.Video, error) 
 	file.Write(data)
 	formats := meta.Formats.WithAudioChannels()
 	formats = formats.Select(func(f youtube.Format) bool {
-		return f.MimeType == "audio/webm; codecs=\"opus\"" &&
-			f.AudioQuality == "AUDIO_QUALITY_MEDIUM"
+		return f.MimeType == "audio/webm; codecs=\"opus\"" ||
+			f.MimeType == "audio/mp4; codecs=\"mp4a.40.2\""
 	})
 	meta.Formats = formats
 	return meta, nil
@@ -111,15 +111,24 @@ func (serv *DownloadAudio) downloadAudio(audio *youtube.Video, writer io.Writer)
 	if len(audio.Formats) == 0 {
 		return fmt.Errorf("no audio format for '%s'", audio.ID)
 	}
-	stream, _, err := serv.client.GetStream(audio, &audio.Formats[0])
-	if err != nil {
-		return err
-	}
-	defer stream.Close()
+	counter := 0
+	var er error
+	for counter < 10 {
+		stream, _, err := serv.client.GetStream(audio, &audio.Formats[0])
+		if err != nil {
+			er = err
+			counter += 1
+			continue
+		}
+		defer stream.Close()
 
-	_, err = io.Copy(writer, stream)
-	if err != nil {
-		return err
+		_, err = io.Copy(writer, stream)
+		if err != nil {
+			er = err
+			counter += 1
+			continue
+		}
+		return nil
 	}
-	return nil
+	return er
 }
