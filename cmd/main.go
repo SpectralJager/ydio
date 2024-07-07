@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 
 	app.StaticFS("/static", os.DirFS("./public"))
 
-	// app.Use(middleware.Logger())
+	app.Use(middleware.Logger())
 	app.Use(session.Middleware(sessions.NewCookieStore([]byte("test"))))
 
 	audioService := service.NewDownloadAudioService()

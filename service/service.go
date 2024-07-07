@@ -8,13 +8,12 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"regexp"
 
 	"github.com/kkdai/youtube/v2"
 )
 
 var (
-	rgxp = regexp.MustCompile(`[^a-zA-Z0-9\.,;:&\[\]'" ]+`)
+// rgxp = regexp.MustCompile(`[]+`)
 )
 
 type DownloadAudio struct {
@@ -48,7 +47,6 @@ func (serv *DownloadAudio) GetAudioMetadate(url string) (*youtube.Video, error) 
 }
 
 func (serv *DownloadAudio) GetPlaylistMetadate(url string) (*youtube.Playlist, error) {
-	log.Println(url)
 	return serv.client.GetPlaylist(url)
 }
 
@@ -83,7 +81,7 @@ func (serv *DownloadAudio) DownloadPlaylist(playlist *youtube.Playlist, ids []st
 				log.Println("no meta", entry.Title)
 				continue
 			}
-			zipFile, err := zipWriter.Create(fmt.Sprintf("%s.mp3", rgxp.ReplaceAllString(video.Title, " ")))
+			zipFile, err := zipWriter.Create(fmt.Sprintf("%s.mp3", video.Title))
 			if err != nil {
 				log.Println("can't create zip entity", entry.Title)
 				continue
@@ -100,7 +98,6 @@ func (serv *DownloadAudio) DownloadPlaylist(playlist *youtube.Playlist, ids []st
 			}
 		}
 	}
-	fmt.Println(counter)
 	if counter == 0 {
 		return fmt.Errorf("can't download audios for playlist %s", playlist.ID)
 	}

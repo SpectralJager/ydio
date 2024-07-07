@@ -21,7 +21,6 @@ func (h AudioHandler) RenderPage(ctx echo.Context) error {
 	if !ok {
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/")
 	}
-	log.Println(id)
 	meta, err := h.Downloader.GetAudioMetadate(id)
 	if err != nil {
 		log.Println(err)
@@ -74,8 +73,6 @@ func (h AudioHandler) GetStatus(ctx echo.Context) error {
 		SendClose(ctx)
 		return nil
 	}
-
-	log.Println("sse")
 
 	var buff bytes.Buffer
 	buff.WriteString("event: close\n")

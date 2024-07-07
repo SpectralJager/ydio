@@ -53,7 +53,6 @@ func (h PlaylistHandler) DownloadPlaylist(ctx echo.Context) error {
 	if !ok {
 		ids = []string{}
 	}
-	log.Println(ids)
 	err = SetValueToSession(ctx, "ids", ids)
 	if err != nil {
 		log.Println(err)
