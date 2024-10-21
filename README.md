@@ -18,6 +18,7 @@ V1:
 
 # Technology stack
 Backend: Golang
+
 Frontend: HTMX + AlpineJS
 
 # Todo
