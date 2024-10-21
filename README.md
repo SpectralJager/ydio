@@ -24,3 +24,5 @@ Frontend: HTMX + AlpineJS
 - [x] search ways to download audio from youtube;
 - [x] search ways to convert webm to mp3;
 - [x] setup project;
+- [ ] implement index view;
+- [ ] implement single audio download;

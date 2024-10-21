@@ -1,0 +1,27 @@
+package view
+
+templ Basic() {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<!-- Tailwind styles -->
+			<link rel="stylesheet" href="/static/styles.css"/>
+			<!-- HTMX -->
+			<script src="https://unpkg.com/htmx.org@2.0.3"></script>
+			<script src="https://kit.fontawesome.com/489757ffcd.js" crossorigin="anonymous"></script>
+			<title>Document</title>
+		</head>
+		<body>
+			<div id="app">
+				{ children... }
+				<footer class="footer footer-center bg-base-300 text-base-content p-4">
+					<aside>
+						<p>Created with <i class="fa-solid fa-heart text-primary"></i> by Daniel!</p>
+					</aside>
+				</footer>
+			</div>
+		</body>
+	</html>
+}
