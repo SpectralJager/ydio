@@ -18,11 +18,60 @@ templ SingleView() {
 				If audio for that video exists you will receive all posible informatino about it.
 				Otherwise you should get correct video URL or ID. 
 			</span>
-			<form class="flex flex-col gap-4 mt-10 w-full">
+			<form class="flex flex-col gap-4 mt-10 w-full" action="/single/test">
 				// url or id input
-				<input type="text" placeholder="Enter video URL or ID" class="input input-bordered w-full"/>
-				// continue button
-				<button class="btn btn-primary">Continue <i class="fa-solid fa-arrow-right"></i></button>
+				<div class="join">
+					<input type="text" name="video" placeholder="Enter video URL or ID" class="input input-bordered w-full join-item"/>
+					// continue button
+					<button class="btn btn-primary join-item">Continue <i class="fa-solid fa-arrow-right"></i></button>
+				</div>
+			</form>
+		</div>
+	}
+}
+
+templ SingleInfoView() {
+	@Basic() {
+		<div class="flex-1 flex flex-col items-center mt-20 w-1/2">
+			// navigation
+			<ul class="steps">
+				<li class="step step-primary"><a href="/">Home</a></li>
+				<li class="step step-primary"><a href="/single">Input URL or ID</a></li>
+				<li class="step step-primary">Get information about audio</li>
+				<li class="step">Download</li>
+			</ul>
+			// video information
+			<div class="w-full mt-10 flex flex-col gap-4 items-center">
+				// video preview image
+				<div class="w-2/3 h-72 bg-neutral rounded-md"></div>
+				// video title
+				<h1 class="font-bold text-4xl">Lorem ipsum dolor sit amet.</h1>
+				// video statistic
+				<div class="stats">
+					<div class="stat">
+						<div class="stat-figure text-primary"></div>
+						<div class="stat-title">Duration</div>
+						<div class="stat-value text-primary">1m 30s</div>
+					</div>
+					<div class="stat">
+						<div class="stat-figure text-secondary"></div>
+						<div class="stat-title">Views</div>
+						<div class="stat-value text-secondary">1 million</div>
+					</div>
+				</div>
+			</div>
+			<form action="/single/test/download" class="mt-4">
+				<div class="join">
+					<select class="select select-bordered join-item">
+						<option disabled selected>Pick one</option>
+						<option>Star Wars</option>
+						<option>Harry Potter</option>
+						<option>Lord of the Rings</option>
+						<option>Planet of the Apes</option>
+						<option>Star Trek</option>
+					</select>
+					<button class="btn btn-primary join-item">Continue <i class="fa-solid fa-arrow-right"></i></button>
+				</div>
 			</form>
 		</div>
 	}
