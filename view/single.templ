@@ -1,0 +1,29 @@
+package view
+
+templ SingleView() {
+	@Basic() {
+		<div class="flex-1 flex flex-col items-center mt-20 w-1/2">
+			// navigation
+			<ul class="steps">
+				<li class="step step-primary"><a href="/">Home</a></li>
+				<li class="step step-primary">Input URL or ID</li>
+				<li class="step">Get information about audio</li>
+				<li class="step">Download</li>
+			</ul>
+			// description/hint
+			<span class="text-lg mt-10">
+				First of all we should find audio to download. 
+				It could be any <span class="text-primary">public</span> or <span class="text-primary">shared</span> video from youtube.
+				You need copy video's URL or ID, then put it in input field and press "continue". 
+				If audio for that video exists you will receive all posible informatino about it.
+				Otherwise you should get correct video URL or ID. 
+			</span>
+			<form class="flex flex-col gap-4 mt-10 w-full">
+				// url or id input
+				<input type="text" placeholder="Enter video URL or ID" class="input input-bordered w-full"/>
+				// continue button
+				<button class="btn btn-primary">Continue <i class="fa-solid fa-arrow-right"></i></button>
+			</form>
+		</div>
+	}
+}

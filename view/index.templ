@@ -2,7 +2,7 @@ package view
 
 templ IndexView() {
 	@Basic() {
-		<div class="hero bg-base-200 min-h-screen">
+		<div class="hero bg-base-200 flex-1">
 			<div class="hero-content text-center">
 				<div class="max-w-md">
 					<h1 class="text-5xl font-bold">Welcome to the <span class="text-primary">Ydio</span>!</h1>
@@ -11,7 +11,7 @@ templ IndexView() {
 						Try it right now!
 					</p>
 					<div class="flex flex-row justify-center gap-2">
-						<a class="btn btn-outline"><i class="fa-regular fa-circle-down"></i> Signle audio</a>
+						<a href="/single" class="btn btn-outline"><i class="fa-regular fa-circle-down"></i> Signle audio</a>
 						<a class="btn btn-outline"><i class="fa-regular fa-circle-down"></i> Multiple audios</a>
 						<a class="btn btn-outline"><i class="fa-regular fa-circle-down"></i> Playlist</a>
 					</div>

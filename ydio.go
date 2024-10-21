@@ -21,6 +21,7 @@ func main() {
 	// single audio download view routes
 	// `/single/...`
 	// TODO: implement index view routes
+	app.GET("/single", SingleHandle)
 
 	// multiple audios download view routes
 	// `/multiple/...`
@@ -37,4 +38,8 @@ func main() {
 
 func IndexHandle(c echo.Context) error {
 	return view.IndexView().Render(c.Request().Context(), c.Response())
+}
+
+func SingleHandle(c echo.Context) error {
+	return view.SingleView().Render(c.Request().Context(), c.Response())
 }

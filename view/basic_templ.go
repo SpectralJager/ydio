@@ -29,7 +29,7 @@ func Basic() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><!-- Tailwind styles --><link rel=\"stylesheet\" href=\"/static/styles.css\"><!-- HTMX --><script src=\"https://unpkg.com/htmx.org@2.0.3\"></script><script src=\"https://kit.fontawesome.com/489757ffcd.js\" crossorigin=\"anonymous\"></script><title>Document</title></head><body><div id=\"app\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><!-- Tailwind styles --><link rel=\"stylesheet\" href=\"/static/styles.css\"><!-- HTMX --><script src=\"https://unpkg.com/htmx.org@2.0.3\"></script><script src=\"https://kit.fontawesome.com/489757ffcd.js\" crossorigin=\"anonymous\"></script><title>Document</title></head><body class=\"w-screen h-screen overflow-scroll\"><div id=\"app\" class=\"flex flex-col items-center w-full h-full\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

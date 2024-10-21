@@ -8,7 +8,7 @@ package view
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func IndexView() templ.Component {
+func SingleView() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -41,7 +41,7 @@ func IndexView() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"hero bg-base-200 flex-1\"><div class=\"hero-content text-center\"><div class=\"max-w-md\"><h1 class=\"text-5xl font-bold\">Welcome to the <span class=\"text-primary\">Ydio</span>!</h1><p class=\"py-6\">Ydio is personal tool, allowing download audio files and playlists from youtube. Try it right now!</p><div class=\"flex flex-row justify-center gap-2\"><a href=\"/single\" class=\"btn btn-outline\"><i class=\"fa-regular fa-circle-down\"></i> Signle audio</a> <a class=\"btn btn-outline\"><i class=\"fa-regular fa-circle-down\"></i> Multiple audios</a> <a class=\"btn btn-outline\"><i class=\"fa-regular fa-circle-down\"></i> Playlist</a></div></div></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex-1 flex flex-col items-center mt-20 w-1/2\"><ul class=\"steps\"><li class=\"step step-primary\"><a href=\"/\">Home</a></li><li class=\"step step-primary\">Input URL or ID</li><li class=\"step\">Get information about audio</li><li class=\"step\">Download</li></ul><span class=\"text-lg mt-10\">First of all we should find audio to download.  It could be any <span class=\"text-primary\">public</span> or <span class=\"text-primary\">shared</span> video from youtube. You need copy video's URL or ID, then put it in input field and press \"continue\".  If audio for that video exists you will receive all posible informatino about it. Otherwise you should get correct video URL or ID. </span><form class=\"flex flex-col gap-4 mt-10 w-full\"><input type=\"text\" placeholder=\"Enter video URL or ID\" class=\"input input-bordered w-full\"><button class=\"btn btn-primary\">Continue <i class=\"fa-solid fa-arrow-right\"></i></button></form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
