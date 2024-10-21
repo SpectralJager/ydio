@@ -102,4 +102,51 @@ func SingleInfoView() templ.Component {
 	})
 }
 
+func SingleDownloadView() templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var5 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var5 == nil {
+			templ_7745c5c3_Var5 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Var6 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
+					}
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex-1 flex flex-col items-center mt-20 w-1/2\"><ul class=\"steps\"><li class=\"step step-primary\"><a href=\"/\">Home</a></li><li class=\"step step-primary\"><a href=\"/single\">Input URL or ID</a></li><li class=\"step step-primary\"><a href=\"/single/test\">Get information about audio</a></li><li class=\"step step-primary\">Download</li></ul><div class=\"flex flex-col w-full items-center gap-2 mt-10\"><div class=\"w-2/3 h-72 bg-neutral rounded-md\"></div><h1 class=\"font-bold text-2xl\">Lorem ipsum dolor sit amet.</h1><span class=\"text-lg\">selected format</span></div><div class=\"flex flex-col w-full max-w-screen-sm gap-2 mt-4\"><h2 class=\"font-bold text-xl\">Download progress:</h2><progress class=\"progress progress-primary h-4\" value=\"25\" max=\"100\"></progress></div><div class=\"flex flex-col w-full max-w-screen-sm gap-2 mt-4\"><h2 class=\"font-bold text-xl\">Download complite!</h2><a class=\"btn btn-primary text-lg\"><i class=\"fa-regular fa-circle-down\"></i> Get audio</a></div></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return templ_7745c5c3_Err
+		})
+		templ_7745c5c3_Err = Basic().Render(templ.WithChildren(ctx, templ_7745c5c3_Var6), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return templ_7745c5c3_Err
+	})
+}
+
 var _ = templruntime.GeneratedTemplate

@@ -51,5 +51,5 @@ func SingleInfoHandle(c echo.Context) error {
 }
 
 func SingleDownloadHandle(c echo.Context) error {
-	return view.SingleInfoView().Render(c.Request().Context(), c.Response())
+	return view.SingleDownloadView().Render(c.Request().Context(), c.Response())
 }

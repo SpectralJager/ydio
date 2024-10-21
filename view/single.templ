@@ -76,3 +76,34 @@ templ SingleInfoView() {
 		</div>
 	}
 }
+
+templ SingleDownloadView() {
+	@Basic() {
+		<div class="flex-1 flex flex-col items-center mt-20 w-1/2">
+			<ul class="steps">
+				<li class="step step-primary"><a href="/">Home</a></li>
+				<li class="step step-primary"><a href="/single">Input URL or ID</a></li>
+				<li class="step step-primary"><a href="/single/test">Get information about audio</a></li>
+				<li class="step step-primary">Download</li>
+			</ul>
+			<div class="flex flex-col w-full items-center gap-2 mt-10">
+				// video preview
+				<div class="w-2/3 h-72 bg-neutral rounded-md"></div>
+				// video title
+				<h1 class="font-bold text-2xl">Lorem ipsum dolor sit amet.</h1>
+				// selected format
+				<span class="text-lg">selected format</span>
+			</div>
+			<div class="flex flex-col w-full max-w-screen-sm gap-2 mt-4">
+				<h2 class="font-bold text-xl">Download progress:</h2>
+				// download progres
+				<progress class="progress progress-primary h-4" value="25" max="100"></progress>
+			</div>
+			<div class="flex flex-col w-full max-w-screen-sm gap-2 mt-4">
+				<h2 class="font-bold text-xl">Download complite!</h2>
+				// get file
+				<a class="btn btn-primary text-lg"><i class="fa-regular fa-circle-down"></i> Get audio</a>
+			</div>
+		</div>
+	}
+}
